@@ -184,6 +184,47 @@ pg-orm/
 
 ✅ Full support  ⚠️ Limited support  ❌ No support
 
+## Development
+
+### Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/pg-orm.git
+   cd pg-orm
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Build all packages:
+   ```bash
+   npm run build
+   ```
+
+### Scripts
+
+- `npm run build`: Build all packages
+- `npm run test`: Run tests for all packages
+- `npm run lint`: Lint all packages
+- `npm run format`: Format code with Prettier
+
+### Monorepo Structure
+
+This project uses a monorepo structure with the following packages:
+
+- `@pg-orm/core`: Core types and utilities
+- `@pg-orm/schema`: Schema definition and parsing
+- `@pg-orm/engine`: Database connection and query execution
+- `@pg-orm/client`: Client API for database operations
+- `@pg-orm/generator`: Code generation from schema
+- `@pg-orm/cli`: Command-line interface
+- `@pg-orm/extensions`: PostgreSQL extension support
+
+Each package has its own `package.json` and can be built and tested individually.
+
 ## Getting Started (Future Documentation)
 
 ```typescript

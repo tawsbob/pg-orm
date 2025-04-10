@@ -1,0 +1,41 @@
+{
+  "name": "@pg-orm/engine",
+  "version": "0.1.0",
+  "description": "Database interaction engine for PG-ORM handling connections and query execution",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [
+    "postgresql",
+    "postgres",
+    "orm",
+    "database",
+    "sql",
+    "typescript"
+  ],
+  "files": [
+    "dist"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@pg-orm/core": "^0.1.0",
+    "pg": "^8.10.0",
+    "pg-cursor": "^2.9.0",
+    "pg-pool": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.11",
+    "@types/pg": "^8.6.6",
+    "@types/pg-cursor": "^2.7.0",
+    "@types/pg-pool": "^2.0.3",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.4"
+  }
+} 
