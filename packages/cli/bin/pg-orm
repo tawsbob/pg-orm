@@ -1,6 +1,0 @@
-#!/usr/bin/env node
-
-// This is a placeholder for the CLI binary
-// It will be implemented according to the roadmap in Phase 3-4
-
-require('../dist/cli').run(); 
