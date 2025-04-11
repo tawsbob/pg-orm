@@ -1,14 +1,7 @@
 // PG-ORM Schema Definition Example
 
-datasource db {
-  provider = "postgresql"
+config {
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider        = "pg-orm-client"
-  output          = "./generated"
-  binaryTargets   = ["native"]
 }
 
 model User {
