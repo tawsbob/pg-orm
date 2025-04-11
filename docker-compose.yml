@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: pg-orm-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pgorm
+      POSTGRES_PASSWORD: pgorm_password
+      POSTGRES_DB: pgorm_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pgorm -d pgorm_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional: PostgreSQL admin interface
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pg-orm-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgorm.dev
+      PGADMIN_DEFAULT_PASSWORD: pgadmin_password
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  # Optional: Test database (for running integration tests)
+  postgres_test:
+    image: postgres:15-alpine
+    container_name: pg-orm-postgres-test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pgorm_test
+      POSTGRES_PASSWORD: pgorm_test_password
+      POSTGRES_DB: pgorm_test
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pgorm_test -d pgorm_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  postgres_test_data:
+  pgadmin_data: 
