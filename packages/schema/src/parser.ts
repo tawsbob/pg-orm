@@ -3,22 +3,21 @@
  * @packageDocumentation
  */
 
-import { SchemaParsingError } from '@pg-orm/core';
-import { Schema, TokenType, Token, NodeType, SchemaNode } from './types';
+import { SchemaParsingError, ModelDefinition, FieldDefinition } from '@pg-orm/core';
+import { Schema } from './types';
+import { Parser } from './parser/parser';
+import { SchemaNode } from './parser/ast/nodes';
 
 /**
  * Parse schema definition language string into a Schema object
- * This is a placeholder implementation that will be expanded later
  */
 export function parseSchema(schemaString: string): Schema {
   try {
-    // Tokenize the schema string (placeholder)
-    const tokens = tokenize(schemaString);
+    // Parse the schema string into an AST
+    const parser = new Parser();
+    const ast = parser.parse(schemaString);
     
-    // Parse the tokens into an AST (placeholder)
-    const ast = parse(tokens);
-    
-    // Convert the AST to a schema (placeholder)
+    // Convert the AST to a schema
     const schema = convertAstToSchema(ast);
     
     return schema;
@@ -31,37 +30,62 @@ export function parseSchema(schemaString: string): Schema {
 }
 
 /**
- * Tokenize the schema string (placeholder implementation)
- */
-function tokenize(schemaString: string): Token[] {
-  // This is a placeholder that will be implemented later
-  return [
-    { type: TokenType.EOF, value: '', line: 1, column: schemaString.length + 1 }
-  ];
-}
-
-/**
- * Parse tokens into an AST (placeholder implementation)
- */
-function parse(tokens: Token[]): SchemaNode {
-  // This is a placeholder that will be implemented later
-  return {
-    type: NodeType.SCHEMA,
-    location: { line: 1, column: 1 },
-    models: [],
-    enums: [],
-    types: []
-  };
-}
-
-/**
- * Convert AST to Schema (placeholder implementation)
+ * Convert AST to Schema (Will be expanded as we implement more features)
+ * For now, this is a simplified implementation that only converts models
  */
 function convertAstToSchema(ast: SchemaNode): Schema {
-  // This is a placeholder that will be implemented later
-  return {
+  // Create a basic Schema object
+  const schema: Schema = {
     models: [],
     enums: [],
     types: []
   };
+  
+  // Process models
+  for (const model of ast.models) {
+    // Convert fields
+    const fields: FieldDefinition[] = model.fields.map(field => {
+      // Basic field properties
+      const fieldDef: FieldDefinition = {
+        name: field.name,
+        type: field.fieldType.name,
+        isRequired: field.isRequired,
+        isArray: field.isArray,
+        attributes: {}
+      };
+      
+      // Process field attributes
+      for (const attr of field.attributes) {
+        if (attr.name === 'id') {
+          fieldDef.isPrimary = true;
+        } else if (attr.name === 'unique') {
+          fieldDef.isUnique = true;
+        } else {
+          // Store other attributes
+          fieldDef.attributes![attr.name] = attr.arguments.map(arg => arg.value);
+        }
+      }
+      
+      return fieldDef;
+    });
+    
+    // Create the model definition
+    const modelDef: ModelDefinition = {
+      name: model.name,
+      fields: fields,
+      attributes: {}
+    };
+    
+    // Process model attributes
+    if (model.attributes.length > 0) {
+      for (const attr of model.attributes) {
+        modelDef.attributes![attr.name] = attr.arguments.map(arg => arg.value);
+      }
+    }
+    
+    // Add to schema
+    schema.models.push(modelDef);
+  }
+  
+  return schema;
 } 
